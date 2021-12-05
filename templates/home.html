@@ -3,44 +3,23 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width">
-    <title>replit</title>
+    <title>{% block title %}{% endblock %}</title>
     <link href="static/style.css" rel="stylesheet" type="text/css" />
   </head>
   <body style="width: 100%; height: 100%;">
-
-    <div id="wrap" style='display: flex; flex-direction: column; width: 100%; height: 100%; text-align: center;'>
-      <!--header-->
+    <div id="wrap">
       <div id="header">Christmas CINEMA</div>
-      <!--예매 내역 확인 버튼, 000 님-->
       <div id="nav" style='width: 100%; text-align: right;'>
-        000 님 
-        <button>예매 내역 확인</button>
+        {{name}} 님
+        <button type='button' onclick="location.href='/myticket'">예매 내역 확인</button>
       </div>
-      <!--content-->
-      <div id="mvwrap" style='width: 100%; border: 1px solid black;'>
-        <!--영화, 영화관, 날짜 선택-->
-          <div id="steps" style='display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid black;'>
-            <div class="mv_info">
-              <div id="col_head">영화 선택</div>
-              <div class="col_body">영화 이름</div>
-            </div>
-            <div class="ci_info">
-              <div id="col_head">영화관 선택</div>
-              <div class="col_body">영화관 이름</div>
-            </div>
-            <div class="date_info">
-              <div id="col_head">날짜 선택</div>
-              <div class="col_body">날짜</div>
-            </div>
-            <div class="time_info">
-              <div id="col_head">시간 선택</div>
-              <div class="col_body">시간</div>
-            </div>
-          </div>
-      </div>
-      <!--next step-->
+
+        {% block contents %}
+        {% endblock %}
+
       <div id="footer">
-        <button id="next_btn" style='text-align: right;'>좌석선택</button>
+        {% block buttons %}
+        {% endblock %}
       </div>
     </div>
     <script src="script.js"></script>

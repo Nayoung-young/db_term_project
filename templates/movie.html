@@ -1,0 +1,32 @@
+{% extends "home.html" %}
+
+{% block title %}movie{% endblock %}
+
+{% block contents %}
+<div id="mvwrap">
+  <div id="steps" style='display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid black;'>
+    <div class="mv_info">
+      <div id="col_head">영화 선택</div>
+      <div class="col_body">영화 이름</div>
+    </div>
+    <div class="ci_info">
+      <div id="col_head">영화관 선택</div>
+      <div class="col_body">영화관 이름</div>
+    </div>
+    <div class="date_info">
+      <div id="col_head">날짜 선택</div>
+      <div class="col_body">날짜</div>
+    </div>
+    <div class="time_info">
+      <div id="col_head">시간 선택</div>
+      <div class="col_body">시간</div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block buttons %}
+<button id='next_btn'>좌석선택</button>
+{% endblock %}
+
+

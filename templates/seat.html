@@ -1,38 +1,20 @@
-<!DOCTYPE html>
-<html lang="en" style='width: 100%; height: 100%;'>
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Document</title>
-  <link href="static/style.css" rel="stylesheet" type="text/css" />
-</head>
-<body style="width: 100%; height: 100%;">
+{% extends "home.html" %}
 
-    <div id="wrap" style='display: flex; flex-direction: column; width: 100%; height: 100%; text-align: center;'>
-      <!--header-->
-      <div id="header">Christmas CINEMA</div>
-      <!--예매 내역 확인 버튼, 000 님-->
-      <div id="nav" style='width: 100%; text-align: right;'>
-        000 님 
-        <button>예매 내역 확인</button>
-      </div>
-      <!--content-->
-      <div id="mvwrap" style='width: 100%; border: 1px solid black; display: grid; justify-items: center;'>
-        <div id="info">
-          {예매 진행 중인 영화 정보}
-        </div>
-        <div id="seats" style='border: 1px solid black; width: 300px; height: 300px;'>
-          {seats}
-        </div>
-      </div>
-      <!--next step-->
-      <div id="footer">
-        <button id="back_btn">뒤로</button>
-        <button id="pay_btn">지금 결제하기</button>
-        <button id="next_btn">나중에 결제하기</button>
-        <!--js 코드로 예매하기 버튼 누르면 alert 창에 '예매 완료되었습니다' 보여주고 예매 내역 화면으로 이동-->
-      </div>
-    </div>
-    <script src="script.js"></script>
-  </body>
-</html>
+{% block title %}movie{% endblock %}
+
+{% block contents %}
+<div id="seatwrap">
+  <div id="info">
+    {예매 진행 중인 영화 정보}
+  </div>
+  <div id="seats" style='border: 1px solid black; width: 300px; height: 300px;'>
+    {seats}
+  </div>
+</div>
+{% endblock %}
+
+{% block buttons %}
+<button id="back_btn">뒤로</button>
+<button id="pay_btn">지금 결제하기</button>
+<button id="next_btn">나중에 결제하기</button>
+{% endblock %}
