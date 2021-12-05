@@ -1,5 +1,5 @@
 from flask import Flask
-from flask.templating import render_template
+from flask import render_template
 #from flask import render_template
 
 from db import testQuery # python 파일에서 함수 가져오기 
