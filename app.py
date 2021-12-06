@@ -10,22 +10,16 @@ def home():
 @app.route('/movie', methods=['POST', 'GET'])
 def ticket_home():
     if request.method == 'POST':
+        print(request.form)
         email = request.form['email']
-        name = memberInfo.get_name(email)
+        pwd = request.form['pwd']
+        # get name 
+        name = memberInfo.get_name(email, pwd)
         if name == None: 
             return "<h1>cannot find your information.</h1>back to <a href='/'>login</a>"
         else: return render_template('movie.html', name=name)
     else: 
         return '<h1>you cannot access this page without login</h1>'
-
-@app.route('/test')
-def test():
-    i = testQuery()
-    return i
-
-@app.route('/test/<name>')
-def test_name(name):
-    return render_template('test_home.html', name=name)
 
 if __name__ == "__main__":
     app.run(debug=True)

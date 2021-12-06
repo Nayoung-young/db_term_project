@@ -1,16 +1,26 @@
 import psycopg2
 
-db = psycopg2.connect(host='localhost', 
-    dbname='movies', user='postgres', password='0130', port='5432')
+db = psycopg2.connect("""
+    host = localhost dbname=movies user=postgres password=0130 port=5432
+    """)
 cursor = db.cursor()
 
+class convert:
+    def tup_to_str(tup):
+        return ''.join(tup)
+
 class memberInfo:
-    def get_name(email):
-        email = '\''+email+'\''
-        print(email)
-        print(cursor.execute("SELECT * FROM member;").fetchone())
-        #print(cursor.execute("SELECT name FROM member where email = (%s);", [email]))
-        return cursor.execute("SELECT name FROM member where email = (%s);", [email])
+    def get_name(email, pwd):
+        cursor.execute("""
+            SELECT name FROM member where email = (%s) and password = (%s)
+            """, (email, pwd))
+        name = cursor.fetchone()
+        if name is None: 
+            return None
+        else: 
+            return convert.tup_to_str(name)
+
+        
 
 # def testQuery(): 
 #     cursor.execute("SELECT * FROM instructor;")
