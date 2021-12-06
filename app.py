@@ -8,7 +8,7 @@ def home():
     return render_template('login.html')
 
 @app.route('/movie', methods=['POST', 'GET'])
-def ticket_home():
+def movie_home():
     if request.method == 'POST':
         print(request.form)
         email = request.form['email']
@@ -17,9 +17,21 @@ def ticket_home():
         name = memberInfo.get_name(email, pwd)
         if name == None: 
             return "<h1>cannot find your information.</h1>back to <a href='/'>login</a>"
-        else: return render_template('movie.html', name=name)
+        else: pass
     else: 
         return '<h1>you cannot access this page without login</h1>'
+    
+    movies = movieInfo.get_movie()
+    cinemas = ['1', '2']
+    dates = ['1', '2']
+    theaters = ['1', '2']
+
+    return render_template('movie.html', 
+        name=name, movies=movies, cinemas=cinemas, dates=dates, theaters=theaters)
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

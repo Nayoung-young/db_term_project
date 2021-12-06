@@ -20,12 +20,9 @@ body {
 }
 
 #mvwrap {
-    width: 100%; border: 1px solid black;
+    width: 100%;
 }
 
-#steps {
-    display: grid; grid-template-columns: repeat(4, 1fr); border: 1px solid black;
-}
 
 #seatwrap {
     width: 100%; border: 1px solid black; display: grid; justify-items: center;

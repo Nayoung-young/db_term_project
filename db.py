@@ -20,7 +20,16 @@ class memberInfo:
         else: 
             return convert.tup_to_str(name)
 
-        
+class movieInfo:
+    def get_movie():
+        cursor.execute("""
+        SELECT age, title FROM movie;
+        """)
+        movies = cursor.fetchall()
+        print(movies)
+        return movies
+    
+    
 
 # def testQuery(): 
 #     cursor.execute("SELECT * FROM instructor;")
