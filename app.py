@@ -24,15 +24,17 @@ def movie_home():
     movies = movieInfo.get_mv()
     cinemas = movieInfo.get_cin()
     dates = movieInfo.get_dat()
-    #theaters = ['1', '2']
-
 
     return render_template('movie.html', 
         name=name, movies=movies, cinemas=cinemas, dates=dates)
 
+@app.route('/movie/seats', methods=['POST', 'GET'])
+def test():
+    return 
 
-
-
+@app.route('/myticket', methods=['POST', 'GET'])
+def testt():
+    return 
 
 if __name__ == "__main__":
     app.run(debug=True)

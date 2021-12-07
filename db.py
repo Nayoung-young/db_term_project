@@ -6,7 +6,7 @@ db = psycopg2.connect("""
 cursor = db.cursor()
 
 class convert:
-    def tup_to_str(tup):
+    def join_to_str(tup):
         return ''.join(tup)
 
 class memberInfo:
@@ -18,45 +18,36 @@ class memberInfo:
         if name is None: 
             return None
         else: 
-            return convert.tup_to_str(name)
+            return convert.join_to_str(name)
 
 class movieInfo:
     def get_mv():
         cursor.execute("""
-        SELECT title FROM movie;
+        SELECT * FROM movie as a
+        WHERE a.id IN (SELECT movie_id FROM movie_schedule);
         """)
         movies = cursor.fetchall()
-        str_mv = []
-        for i in movies: 
-            i = convert.tup_to_str(i)
-            str_mv.append(i)
-        #print(movies)
-        return str_mv
+        print(movies)
+        return movies
     
     def get_cin(): 
         cursor.execute("""
-        SELECT name FROM cinema;
+        SELECT * FROM cinema as a
+        WHERE a.id IN (SELECT cinema_id FROM movie_schedule);
         """)
         cin = cursor.fetchall()
-        str_cin = []
-        for i in cin: 
-            i = convert.tup_to_str(i)
-            str_cin.append(i)
-        return str_cin
+        print(cin)
+        return cin
     
     def get_dat():
         cursor.execute("""
-        SELECT distinct(day) FROM time_section;
+        SELECT distinct(day) FROM movie_schedule
+        order by day;
         """)
         dat = cursor.fetchall()
         str_dat = []
         for i in dat: 
             str_dat.append(i[0])
         return str_dat
-    
-    
 
-# def testQuery(): 
-#     cursor.execute("SELECT * FROM instructor;")
-#     return (cursor.fetchone()[1])
 

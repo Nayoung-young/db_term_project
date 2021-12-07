@@ -2,22 +2,23 @@
 
 {% block title %}movie{% endblock %}
 
-{% block add_style %} 
+{% block add_style %}
 <style>
-#steps_old {
-  display: grid; 
-  grid-template-columns: repeat(4, 1fr); 
-  justify-items: center; 
-  border: 1px solid black;
-}
-.col_body {
-  display: flex; 
-  flex-direction: column;
-}
+  #steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    justify-items: center;
+    border: 1px solid black;
+  }
 
-#button_old {
-  grid-column: 1/-1;
-}
+  .col_body {
+    display: flex;
+    flex-direction: column;
+  }
+
+  #next_btn {
+    grid-column: 1/-1;
+  }
 </style>
 {% endblock %}
 
@@ -25,47 +26,82 @@
 <div id="mvwrap">
   <form id="steps" method="POST">
     <div class="step mv_info">
-      <div id="col_head">영화 선택
-        <input type="submit" value="저장">
-      </div>
+      <div id="col_head">영화 선택</div>
       <div class="col_body">
-        {% for item in movies %}
-        <span><input type='radio' name='movie'>{{ item }}</input></span>
+        {% for tup in movies %}
+        <span>
+          <input type='radio' name='movie' class='movie'>
+          <label for="movie" class='mv_title'>{{ tup[1] }}</label>
+          <span class='hidden_info' style="visibility: hidden;">{{ tup }}</span>
+          </input>
+        </span>
         {% endfor %}
       </div>
     </div>
     <div class="step ci_info">
-      <div id="col_head">영화관 선택
-        <input type="submit" value="저장">
-      </div>
+      <div id="col_head">영화관 선택</div>
       <div class="col_body">
-        {% for item in cinemas %}
-        <span><input type='radio' name='cinema'>{{ item }}</input></span>
+        {% for tup in cinemas %}
+        <span>
+          <input type='radio' name='cinema' class='cinema'></input>
+          <label for="cinema" class='cin_name'>{{ tup[1] }}</label>
+          <span class='hidden_info' style="visibility: hidden;">{{ tup }}</span>
+        </span>
         {% endfor %}
       </div>
     </div>
     <div class="step date_info">
-      <div id="col_head">날짜 선택
-        <input type="submit" value="저장">
-      </div>
+      <div id="col_head">날짜 선택</div>
       <div class="col_body">
-        {% for item in dates %}
-        <span><input type='radio' name='date'>{{ item }}</input></span>
+        {% for tup in dates %}
+        <span>
+          <input type='radio' name='date' class='date'></input>
+          <label for="date">{{ tup[1] }}</label>
+          <span class='hidden_info' style="visibility: hidden;">{{ tup }}</span>
+        </span>
         {% endfor %}
       </div>
     </div>
     <div class="step time_info">
-      <div id="col_head">시간/상영관 선택
-        <input type="submit" value="저장">
-      </div>
+      <div id="col_head">시간/상영관 선택</div>
       <div class="col_body">
-        <span>영화, 영화관, 날짜를 먼저 선택해주세요.</span>
-        {% for item in theaters %}
-        {% endfor %}
+        <span>영화, 영화관, 날짜를 선택해주세요.</span>
+        <p></p>
       </div>
     </div>
-    <button>좌석 선택</button>
+    <input type="submit" id='next_btn' value="좌석 선택">
   </form>
 </div>
 {% endblock %}
 
+{% block js %}
+<script type="text/javascript">
+  const mv_radios = document.querySelectorAll(".movie"),
+    cin_radios = document.querySelectorAll(".cinema"),
+    dat_radios = document.querySelectorAll(".date");
+
+  function paintMv(id, Checked){
+
+  }
+
+  function handleChecked() {
+    const mv = event.target, 
+      mvSpan = mv.parentNode,
+      info = mvSpan.querySelector(".hidden_info").textContent;
+
+    const whichChecked = mv.className; 
+
+    console.log(whichChecked, "checked");
+    console.log(info);
+    paintAvailable(id, whichChecked);
+  }
+
+  function init() {
+    mv_radios.forEach(Element => Element.addEventListener('click', handleChecked));
+    cin_radios.forEach(Element => Element.addEventListener('click', handleChecked));
+    dat_radios.forEach(Element => Element.addEventListener('click', handleChecked));
+  }
+
+  init();
+</script>
+{% endblock %}
