@@ -4,7 +4,7 @@
 
 {% block add_style %} 
 <style>
-#steps {
+#steps_old {
   display: grid; 
   grid-template-columns: repeat(4, 1fr); 
   justify-items: center; 
@@ -15,7 +15,7 @@
   flex-direction: column;
 }
 
-#next_btn {
+#button_old {
   grid-column: 1/-1;
 }
 </style>
@@ -25,15 +25,19 @@
 <div id="mvwrap">
   <form id="steps" method="POST">
     <div class="step mv_info">
-      <div id="col_head">영화 선택</div>
+      <div id="col_head">영화 선택
+        <input type="submit" value="저장">
+      </div>
       <div class="col_body">
         {% for item in movies %}
-        <span><input type='radio' name='movie'>{{ item[1] }}</input></span>
+        <span><input type='radio' name='movie'>{{ item }}</input></span>
         {% endfor %}
       </div>
     </div>
     <div class="step ci_info">
-      <div id="col_head">영화관 선택</div>
+      <div id="col_head">영화관 선택
+        <input type="submit" value="저장">
+      </div>
       <div class="col_body">
         {% for item in cinemas %}
         <span><input type='radio' name='cinema'>{{ item }}</input></span>
@@ -41,7 +45,9 @@
       </div>
     </div>
     <div class="step date_info">
-      <div id="col_head">날짜 선택</div>
+      <div id="col_head">날짜 선택
+        <input type="submit" value="저장">
+      </div>
       <div class="col_body">
         {% for item in dates %}
         <span><input type='radio' name='date'>{{ item }}</input></span>
@@ -49,14 +55,16 @@
       </div>
     </div>
     <div class="step time_info">
-      <div id="col_head">시간/상영관 선택</div>
+      <div id="col_head">시간/상영관 선택
+        <input type="submit" value="저장">
+      </div>
       <div class="col_body">
+        <span>영화, 영화관, 날짜를 먼저 선택해주세요.</span>
         {% for item in theaters %}
-        <span><input type='radio' name='theater'>{{ item }}</input></span>
         {% endfor %}
       </div>
     </div>
-    <input type="submit" id='next_btn' value="좌석 선택">
+    <button>좌석 선택</button>
   </form>
 </div>
 {% endblock %}

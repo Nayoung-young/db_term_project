@@ -21,13 +21,14 @@ def movie_home():
     else: 
         return '<h1>you cannot access this page without login</h1>'
     
-    movies = movieInfo.get_movie()
-    cinemas = ['1', '2']
-    dates = ['1', '2']
-    theaters = ['1', '2']
+    movies = movieInfo.get_mv()
+    cinemas = movieInfo.get_cin()
+    dates = movieInfo.get_dat()
+    #theaters = ['1', '2']
+
 
     return render_template('movie.html', 
-        name=name, movies=movies, cinemas=cinemas, dates=dates, theaters=theaters)
+        name=name, movies=movies, cinemas=cinemas, dates=dates)
 
 
 

@@ -21,13 +21,38 @@ class memberInfo:
             return convert.tup_to_str(name)
 
 class movieInfo:
-    def get_movie():
+    def get_mv():
         cursor.execute("""
-        SELECT age, title FROM movie;
+        SELECT title FROM movie;
         """)
         movies = cursor.fetchall()
-        print(movies)
-        return movies
+        str_mv = []
+        for i in movies: 
+            i = convert.tup_to_str(i)
+            str_mv.append(i)
+        #print(movies)
+        return str_mv
+    
+    def get_cin(): 
+        cursor.execute("""
+        SELECT name FROM cinema;
+        """)
+        cin = cursor.fetchall()
+        str_cin = []
+        for i in cin: 
+            i = convert.tup_to_str(i)
+            str_cin.append(i)
+        return str_cin
+    
+    def get_dat():
+        cursor.execute("""
+        SELECT distinct(day) FROM time_section;
+        """)
+        dat = cursor.fetchall()
+        str_dat = []
+        for i in dat: 
+            str_dat.append(i[0])
+        return str_dat
     
     
 
