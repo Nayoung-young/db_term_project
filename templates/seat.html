@@ -2,19 +2,30 @@
 
 {% block title %}movie{% endblock %}
 
+{% block add_style %}
+<style>
+  .contents {
+    display: grid;
+    border: 1px solid black;
+    justify-items: center;
+  }
+</style>
+{% endblock %}
+
 {% block contents %}
-<div id="seatwrap">
-  <div id="info">
+<div id="mvwrap" class="contents">
+  <form action="" method="post">
+    <input type="hidden" name="member_email" value='{{email}}'>
+    <div id="info">
     {예매 진행 중인 영화 정보}
   </div>
   <div id="seats" style='border: 1px solid black; width: 300px; height: 300px;'>
+    <input type="hidden" name="member_email" value='{{email}}'>
     {seats}
   </div>
+  <input type="submit" value="뒤로">
+  <input type="submit" value="지금 결제하기">
+  <input type="submit" value="나중에 결제하기">
+  </form>
 </div>
-{% endblock %}
-
-{% block buttons %}
-<button id="back_btn">뒤로</button>
-<button id="pay_btn">지금 결제하기</button>
-<button id="next_btn">나중에 결제하기</button>
 {% endblock %}

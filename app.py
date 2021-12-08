@@ -25,16 +25,30 @@ def movie_home():
     cinemas = movieInfo.get_cin()
     dates = movieInfo.get_dat()
 
-    return render_template('movie.html', 
+    return render_template('movie.html', email=email,
         name=name, movies=movies, cinemas=cinemas, dates=dates)
 
-@app.route('/movie/seats', methods=['POST', 'GET'])
-def test():
-    return 
+@app.route('/seats', methods=['POST', 'GET'])
+def movie_seats():
+    return render_template('seat.html')
+    if request.method == 'POST': 
+    # 앞에서 선택한 정보 받아서, 상영관 좌석 보여주기 
+    # 이미 예약된 좌석은 다른 색으로 처리 
+        return render_template('seat.html')
+
+@app.route('/movie/seats/check', methods=['POST', 'GET'])
+def movie_check():
+    if request.method == 'POST': 
+        # ticket table에 저장 후 확인 메시지 출력 
+        return render_template('movie_check.html')
 
 @app.route('/myticket', methods=['POST', 'GET'])
-def testt():
-    return 
+def show_ticket():
+    return render_template('myticket.html')
+
+
+
+
 
 if __name__ == "__main__":
     app.run(debug=True)

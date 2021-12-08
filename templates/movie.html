@@ -4,11 +4,14 @@
 
 {% block add_style %}
 <style>
-  #steps {
+  .contents {
     display: grid;
+    border: 1px solid black;
+    justify-items: center;
+  }
+  #steps {
     grid-template-columns: repeat(4, 1fr);
     justify-items: center;
-    border: 1px solid black;
   }
 
   .col_body {
@@ -24,16 +27,16 @@
 
 {% block contents %}
 <div id="mvwrap">
-  <form id="steps" method="POST">
+  <form class="contents" id="steps" method="POST">
+    <input type="hidden" name="member_email" value='{{email}}'>
     <div class="step mv_info">
       <div id="col_head">영화 선택</div>
       <div class="col_body">
-        {% for tup in movies %}
+        {% for mv in movies %}
         <span>
           <input type='radio' name='movie' class='movie'>
-          <label for="movie" class='mv_title'>{{ tup[1] }}</label>
-          <span class='hidden_info' style="visibility: hidden;">{{ tup }}</span>
-          </input>
+          <label for="movie" class='mv_title'>{{ mv }}</label>
+          <span class='hidden_info' style="display: none; visibility: hidden;">{{ movies[mv] }}</span>
         </span>
         {% endfor %}
       </div>
@@ -41,11 +44,11 @@
     <div class="step ci_info">
       <div id="col_head">영화관 선택</div>
       <div class="col_body">
-        {% for tup in cinemas %}
+        {% for cin in cinemas %}
         <span>
           <input type='radio' name='cinema' class='cinema'></input>
-          <label for="cinema" class='cin_name'>{{ tup[1] }}</label>
-          <span class='hidden_info' style="visibility: hidden;">{{ tup }}</span>
+          <label for="cinema" class='cin_name'>{{ cin }}</label>
+          <span class='hidden_info' style="display: none; visibility: hidden;">{{ cinemas[cin] }}</span>
         </span>
         {% endfor %}
       </div>
@@ -53,11 +56,11 @@
     <div class="step date_info">
       <div id="col_head">날짜 선택</div>
       <div class="col_body">
-        {% for tup in dates %}
+        {% for item in dates %}
         <span>
           <input type='radio' name='date' class='date'></input>
-          <label for="date">{{ tup[1] }}</label>
-          <span class='hidden_info' style="visibility: hidden;">{{ tup }}</span>
+          <label for="date">{{ item }}</label>
+          <span class='hidden_info' style="display: none; visibility: hidden;">{{ item }}</span>
         </span>
         {% endfor %}
       </div>
@@ -79,21 +82,44 @@
   const mv_radios = document.querySelectorAll(".movie"),
     cin_radios = document.querySelectorAll(".cinema"),
     dat_radios = document.querySelectorAll(".date");
+  
+  function paintOthers(id, Checked){
+    if (Checked == 'movie') {
+      // cin 중에
+      cin_radios.forEach( cin => {
+        cinSpan = cin.parentNode;
+        console.log(cinSpan);
+      })
+      
+    } else if (Checked =='cinema') {
 
-  function paintMv(id, Checked){
+    } else {
+
+    }
 
   }
 
   function handleChecked() {
     const mv = event.target, 
-      mvSpan = mv.parentNode,
-      info = mvSpan.querySelector(".hidden_info").textContent;
+      mSpan = mv.parentNode,
+      info = mSpan.querySelector(".hidden_info").textContent;
 
+    // 모두 체크되었을 때 시간/상영관 선택 step 열림 
+    const radios = document.querySelectorAll('input[type="radio"]');
+    let count = 0
+    radios.forEach(element => {
+      if (element.checked == true) {
+        count += 1; 
+      };
+    });
+    if(count == 3) {
+      console.log("모두 하나씩 checked");
+      // input 태그 생성하기 
+    }
     const whichChecked = mv.className; 
-
     console.log(whichChecked, "checked");
     console.log(info);
-    paintAvailable(id, whichChecked);
+    paintOthers(id, whichChecked);
   }
 
   function init() {

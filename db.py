@@ -23,21 +23,54 @@ class memberInfo:
 class movieInfo:
     def get_mv():
         cursor.execute("""
-        SELECT * FROM movie as a
-        WHERE a.id IN (SELECT movie_id FROM movie_schedule);
+        SELECT title, id FROM movie as a
+        WHERE a.id IN (SELECT movie_id FROM movie_schedule)
+        order by id;
         """)
-        movies = cursor.fetchall()
-        print(movies)
-        return movies
+        mv = cursor.fetchall()
+
+        mv_sch = {}
+        for j in mv:
+            id = j[1]
+            id = convert.join_to_str(id)
+            cursor.execute("""
+            SELECT m.id, s.cinema_id, s.day
+            FROM movie_schedule as s LEFT OUTER JOIN movie as m 
+            ON s.movie_id = m.id
+            WHERE m.id = %s;
+            """, (id,))
+            sch = cursor.fetchall()
+            mv_sch[j[0]] = sch
+        
+        print(mv_sch)
+        return mv_sch
+
+
     
     def get_cin(): 
         cursor.execute("""
-        SELECT * FROM cinema as a
-        WHERE a.id IN (SELECT cinema_id FROM movie_schedule);
+        SELECT name, id FROM cinema as a
+        WHERE a.id IN (SELECT cinema_id FROM movie_schedule)
+        order by id;
         """)
-        cin = cursor.fetchall()
-        print(cin)
-        return cin
+        mv = cursor.fetchall()
+
+        mv_cin = {}
+        for j in mv:
+            id = j[1]
+            id = convert.join_to_str(id)
+            cursor.execute("""
+            SELECT m.id, s.cinema_id, s.day
+            FROM movie_schedule as s LEFT OUTER JOIN cinema as m 
+            ON s.cinema_id = m.id
+            WHERE m.id = %s;
+            """, (id,))
+            cin = cursor.fetchall()
+            mv_cin[j[0]] = cin
+        
+        print(mv_cin)
+        return mv_cin
+
     
     def get_dat():
         cursor.execute("""
