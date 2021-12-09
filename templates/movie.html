@@ -10,11 +10,11 @@
     justify-items: center;
   }
   #steps {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: 1.5fr 1fr 0.5fr 2fr;
     justify-items: center;
   }
 
-  .col_body {
+  .col_body,  .mv_sch {
     display: flex;
     flex-direction: column;
   }
@@ -36,7 +36,11 @@
         <span>
           <input type='radio' name='movie' class='movie'>
           <label for="movie" class='mv_title'>{{ mv }}</label>
-          <span class='hidden_info' style="display: none; visibility: hidden;">{{ movies[mv] }}</span>
+          <span class='hidden_info mv_id' style="display: none; visibility: hidden;">{{ movies[mv][0][0] }}</span>
+          {% for hidden_info in movies[mv] %}
+          <span class='hidden_info cin_id' style="display: none; visibility: hidden;">{{ hidden_info[1] }}</span>
+          <span class='hidden_info date' style="display: none; visibility: hidden;">{{ hidden_info[2] }}</span>
+          {% endfor %}
         </span>
         {% endfor %}
       </div>
@@ -48,7 +52,11 @@
         <span>
           <input type='radio' name='cinema' class='cinema'></input>
           <label for="cinema" class='cin_name'>{{ cin }}</label>
-          <span class='hidden_info' style="display: none; visibility: hidden;">{{ cinemas[cin] }}</span>
+          <span class='hidden_info cin_id' style="display: none; visibility: hidden;">{{ cinemas[cin][0][1] }}</span>
+          {% for hidden_info in cinemas[cin] %}
+          <span class='hidden_info mv_id' style="display: none; visibility: hidden;">{{ hidden_info[0] }}</span>
+          <span class='hidden_info date' style="display: none; visibility: hidden;">{{ hidden_info[2] }}</span>
+          {% endfor %}
         </span>
         {% endfor %}
       </div>
@@ -68,8 +76,19 @@
     <div class="step time_info">
       <div id="col_head">시간/상영관 선택</div>
       <div class="col_body">
-        <span>영화, 영화관, 날짜를 선택해주세요.</span>
-        <p></p>
+        <span class="sch_comment" style="display: block;">영화, 영화관, 날짜를 선택해주세요.</span>
+        <p class='mv_sch' style="display: none;" >
+        {% for sch in mv_schs %}
+        <span class='sch_available' style="display: none;">
+          <input type='radio' name='sch' class='sch'></input>
+          <label for="sch">[{{ sch[5] }}층 {{sch[6]}}관] {{sch[7]}}시 입장, 러닝타임: {{sch[8]}}분 </label>
+          <input type="hidden" class="hidden_info sch_id" style="display: none; visibility: hidden;" value='{{ sch[0] }}'>
+          <input type="hidden" class="hidden_info mv_id" style="display: none; visibility: hidden;" value='{{ sch[1] }}'>
+          <input type="hidden" class="hidden_info cin_id" style="display: none; visibility: hidden;" value='{{ sch[4] }}'>
+          <input type="hidden" class="hidden_info day" style="display: none; visibility: hidden;" value='{{ sch[2] }}'>
+        </span>
+        {% endfor %}
+      </p>
       </div>
     </div>
     <input type="submit" id='next_btn' value="좌석 선택">
@@ -92,11 +111,49 @@
       })
       
     } else if (Checked =='cinema') {
-
     } else {
-
     }
+  }
 
+  function paintSchAvailable(sch_p, mv_id, cin_id, day_id) {
+    const schSpans = sch_p.querySelectorAll("span");
+    schSpans.forEach(span => {
+      span_mv_id = span.querySelector(".mv_id");
+      span_cin_id = span.querySelector(".cin_id");
+      span_day_id = span.querySelector(".day");
+      if (span_mv_id == mv_id && span_cin_id == cin_id && span_day_id == day_id) {
+        span.style.display = "";
+        console.log(span_mv_id, span_cin_id, span_day_id);
+      } 
+    });
+
+    return 
+  }
+
+  function get_checkedId(checkedRadio, list) {
+    //console.log(" get_checkedId");
+    const checkedSpan = checkedRadio.parentNode,
+      id = checkedSpan.querySelector(".hidden_info").textContent;
+      //console.log("checked_id:", id);
+      return id 
+  }
+
+  function get_checkedInfo() {
+    const checkedRadios = document.querySelectorAll('input[type="radio"]:checked');
+    //console.log("get_checkedInfo: ",checkedRadios);
+
+    checkedIds = []
+    
+    const checkedMv_id = get_checkedId(checkedRadios[0])
+    const checkedCin_id = get_checkedId(checkedRadios[1])
+    const checkedDay_id = get_checkedId(checkedRadios[2])
+
+    checkedIds.push(checkedMv_id);
+    checkedIds.push(checkedCin_id);
+    checkedIds.push(checkedDay_id);
+
+    console.log("checked_ids(movie_id, cinema_id, day): ", checkedIds);
+    return checkedIds
   }
 
   function handleChecked() {
@@ -104,22 +161,24 @@
       mSpan = mv.parentNode,
       info = mSpan.querySelector(".hidden_info").textContent;
 
-    // 모두 체크되었을 때 시간/상영관 선택 step 열림 
-    const radios = document.querySelectorAll('input[type="radio"]');
-    let count = 0
-    radios.forEach(element => {
-      if (element.checked == true) {
-        count += 1; 
-      };
-    });
-    if(count == 3) {
-      console.log("모두 하나씩 checked");
-      // input 태그 생성하기 
+    // movie, cinema, day 체크되었을 때 시간/상영관 선택 step 열림 
+    const checkedRadios = document.querySelectorAll('input[type="radio"]:checked');
+    if (checkedRadios.length == 3) {
+      //console.log("mv, cin, day checked");
+      const sch_p = document.querySelector(".mv_sch");
+      sch_p.style.display = "";
+      const sch_comment = document.querySelector(".sch_comment");
+      sch_comment.style.display = "none";
+
+      checkedIds = get_checkedInfo();
+      paintSchAvailable(sch_p, checkedIds[0], checkedIds[1], checkedIds[2]);
+
     }
-    const whichChecked = mv.className; 
-    console.log(whichChecked, "checked");
-    console.log(info);
-    paintOthers(id, whichChecked);
+
+
+    //const whichChecked = mv.className; 
+    //console.log(info);
+    //paintOthers(id, whichChecked);
   }
 
   function init() {

@@ -10,7 +10,7 @@ def home():
 @app.route('/movie', methods=['POST', 'GET'])
 def movie_home():
     if request.method == 'POST':
-        print(request.form)
+        # print(request.form)
         email = request.form['email']
         pwd = request.form['pwd']
         # get name 
@@ -24,9 +24,10 @@ def movie_home():
     movies = movieInfo.get_mv()
     cinemas = movieInfo.get_cin()
     dates = movieInfo.get_dat()
+    mv_schs = movieInfo.get_sch() 
 
     return render_template('movie.html', email=email,
-        name=name, movies=movies, cinemas=cinemas, dates=dates)
+        name=name, movies=movies, cinemas=cinemas, dates=dates, mv_schs = mv_schs)
 
 @app.route('/seats', methods=['POST', 'GET'])
 def movie_seats():

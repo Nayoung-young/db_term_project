@@ -24,7 +24,7 @@ class movieInfo:
     def get_mv():
         cursor.execute("""
         SELECT title, id FROM movie as a
-        WHERE a.id IN (SELECT movie_id FROM movie_schedule)
+        WHERE a.id IN (SELECT movie_id FROM movie_schedule as m where m.is_available ='1')
         order by id;
         """)
         mv = cursor.fetchall()
@@ -34,7 +34,7 @@ class movieInfo:
             id = j[1]
             id = convert.join_to_str(id)
             cursor.execute("""
-            SELECT m.id, s.cinema_id, s.day
+            SELECT s.movie_id, s.cinema_id, s.day
             FROM movie_schedule as s LEFT OUTER JOIN movie as m 
             ON s.movie_id = m.id
             WHERE m.id = %s;
@@ -42,7 +42,7 @@ class movieInfo:
             sch = cursor.fetchall()
             mv_sch[j[0]] = sch
         
-        print(mv_sch)
+        #print(mv_sch)
         return mv_sch
 
 
@@ -50,31 +50,32 @@ class movieInfo:
     def get_cin(): 
         cursor.execute("""
         SELECT name, id FROM cinema as a
-        WHERE a.id IN (SELECT cinema_id FROM movie_schedule)
+        WHERE a.id IN (SELECT cinema_id FROM movie_schedule as m where m.is_available ='1')
         order by id;
         """)
-        mv = cursor.fetchall()
+        cin = cursor.fetchall()
+        #print(cin)
 
         mv_cin = {}
-        for j in mv:
+        for j in cin:
             id = j[1]
             id = convert.join_to_str(id)
             cursor.execute("""
-            SELECT m.id, s.cinema_id, s.day
-            FROM movie_schedule as s LEFT OUTER JOIN cinema as m 
-            ON s.cinema_id = m.id
-            WHERE m.id = %s;
+            SELECT s.movie_id, s.cinema_id, s.day
+            FROM movie_schedule as s LEFT OUTER JOIN cinema as c 
+            ON s.cinema_id = c.id
+            WHERE c.id = %s;
             """, (id,))
             cin = cursor.fetchall()
             mv_cin[j[0]] = cin
         
-        print(mv_cin)
+        #print(mv_cin)
         return mv_cin
 
     
     def get_dat():
         cursor.execute("""
-        SELECT distinct(day) FROM movie_schedule
+        SELECT distinct(day) FROM movie_schedule as m where m.is_available ='1'
         order by day;
         """)
         dat = cursor.fetchall()
@@ -82,5 +83,16 @@ class movieInfo:
         for i in dat: 
             str_dat.append(i[0])
         return str_dat
+    
+    def get_sch():
+        cursor.execute("""
+        select m.id, m.movie_id, m.day, m.time_section_id, m.cinema_id, m.theater_floor, m.room_number, t.start_hr, mm.running_time from movie_schedule as m
+        left outer join time_section as t on m.day = t.day and m.time_section_id = t.time_section_id
+        left outer join movie as mm on m.movie_id = mm.id
+        where m.is_available ='1';
+        """)
+        sch = cursor.fetchall()
+        print(sch)
+        return sch
 
 
