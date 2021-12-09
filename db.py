@@ -12,13 +12,15 @@ class convert:
 class memberInfo:
     def get_name(email, pwd):
         cursor.execute("""
-            SELECT name FROM member where email = (%s) and password = (%s)
-            """, (email, pwd))
+        SELECT name FROM member where email = (%s) and password = (%s)
+        """, (email, pwd))
         name = cursor.fetchone()
         if name is None: 
             return None
         else: 
             return convert.join_to_str(name)
+        
+        
 
 class movieInfo:
     def get_mv():
@@ -95,4 +97,31 @@ class movieInfo:
         print(sch)
         return sch
 
+class seatInfo: 
+    def get_col_row(sch_id):
+        cursor.execute("""
+        select capacity_col, capacity_row
+        FROM (SELECT m.cinema_id, m.theater_floor, m.room_number from movie_schedule as m where m.id =%s) as a
+        JOIN theater as th ON a.cinema_id = th.cinema_id and a.theater_floor = th.floor and a.room_number = th.room_number;
+        """, (sch_id,))
+        capacity = cursor.fetchall()
+        #print(capacity)
+        return capacity
 
+    def get_occupied(sch_id):
+        cursor.execute("""
+        select seat_col, seat_row 
+        FROM ticket WHERE movie_schedule_id = %s
+        """, (sch_id,))
+        occupied = cursor.fetchall()
+        print(occupied)
+        return occupied
+    
+    def get_price(sch_id):
+        cursor.execute("""
+        select th.price FROM (SELECT m.cinema_id, m.theater_floor, m.room_number from movie_schedule as m where m.id =%s) as a
+        JOIN theater as th ON a.cinema_id = th.cinema_id and a.theater_floor = th.floor and a.room_number = th.room_number;
+        """, (sch_id,))
+        price = cursor.fetchall()
+        return price
+        

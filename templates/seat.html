@@ -7,25 +7,90 @@
   .contents {
     display: grid;
     border: 1px solid black;
+    grid-template-columns: 1fr 1fr;
     justify-items: center;
+    align-items: center;
+    text-align: center;
+  }
+
+  .theater_info, .screen {
+    width: 100%;
+  }
+
+  .seat_layout {
+    display: flex;
+    flex-direction: column;
   }
 </style>
 {% endblock %}
 
 {% block contents %}
 <div id="mvwrap" class="contents">
+  <div id="mv_info">
+    {for item in movie_info}
+    <span>{item}</span>
+    {endfor}
+  </div>
   <form action="" method="post">
-    <input type="hidden" name="member_email" value='{{email}}'>
-    <div id="info">
-    {예매 진행 중인 영화 정보}
-  </div>
-  <div id="seats" style='border: 1px solid black; width: 300px; height: 300px;'>
-    <input type="hidden" name="member_email" value='{{email}}'>
-    {seats}
-  </div>
-  <input type="submit" value="뒤로">
-  <input type="submit" value="지금 결제하기">
-  <input type="submit" value="나중에 결제하기">
+    <div id="seats" style='border: 1px solid black; width: 300px; height: 300px;'>
+      <input type="hidden" name="email" value='{{email}}'>
+      <input type="hidden" name="password" value='{{pwd}}'>
+      <input type="hidden" name="sch_id" value='{{scd_id}}'>
+      <div id='theater_info'>
+        {for item in theater_info}
+        <span>{item}</span>
+        {endfor}
+        영화관: {cinema_name} [{theater_floor}층 {room_num}관] - {{price}} 원
+      </div>
+      <div id='screen'>screen</div>
+      <p class='seat_layout'>
+      <!-- js로 seat col수만큼 생성 -->
+      </p>
+    </div>
+    <input type="submit" value="뒤로">
+    <input type="submit" value="지금 결제하기" action='/paid'>
+    <input type="submit" value="나중에 결제하기" action='/movie'>
   </form>
 </div>
+{% endblock %}
+
+{% block js %}
+<script>
+  const seatP = document.querySelector(".seat_layout");
+
+  function createSeats(col, row) {
+    // <input type="radio" name="seat" class="seat" value = "시트번호">
+
+    for (i = 1; i < (row + 1); i++) {
+      let rowDiv = document.createElement("div");
+      rowDiv.className = "seat_row";
+      rowDiv.innerText = i;
+      for (j = 1; j < (col + 1); j++) {
+        let seatRadio = document.createElement("input");
+        seatRadio.type = "radio";
+        seatRadio.name = "seat";
+        seatRadio.className = "seat";
+
+        console.log(i, j)
+        seatRadio.value = j;
+        seatP.appendChild(seatRadio);
+        rowDiv.appendChild(seatRadio);
+      }
+      seatP.appendChild(rowDiv);
+    }
+    return
+  }
+
+  function init() {
+    let col = '{{col}}',
+      row = '{{row}}';
+    col *= 1;
+    row *= 1;
+
+    createSeats(col, row);
+  }
+
+  init();
+</script>
+
 {% endblock %}

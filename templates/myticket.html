@@ -22,7 +22,8 @@
 {% block contents %}
 <div id="mvwrap" class="contents">
   <form action="" method="post">
-    <input type="hidden" name="member_email" value='{{email}}'>
+    <input type="hidden" name="email" value='{{email}}'>
+    <input type="hidden" name="password" value='{{pwd}}'>
     <span>{결제 완료:} {결제 미완료:}</span>
     <div id="ticet_info">
       <!-- { for ticket in tickets } -->
